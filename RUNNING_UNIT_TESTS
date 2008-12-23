@@ -1,6 +1,7 @@
+
 == Creating the test database
 
-The default name for the test databases is "activerecord_versioned". If you 
+The default name for the test databases is "acts_as_versioned_plugin_test". If you 
 want to use another database name then be sure to update the connection 
 adapter setups you want to test with in test/connections/<your database>/connection.rb. 
 When you have the database online, you can import the fixture tables with 

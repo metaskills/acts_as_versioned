@@ -3,9 +3,11 @@ require File.join(File.dirname(__FILE__), 'fixtures/page')
 require File.join(File.dirname(__FILE__), 'fixtures/widget')
 
 class VersionedTest < Test::Unit::TestCase
+  
   fixtures :pages, :page_versions, :locked_pages, :locked_pages_revisions, :authors, :landmarks, :landmark_versions
   set_fixture_class :page_versions => Page::Version
-
+  
+  
   def test_saves_versioned_copy
     p = Page.create! :title => 'first title', :body => 'first body'
     assert !p.new_record?
@@ -24,13 +26,10 @@ class VersionedTest < Test::Unit::TestCase
   def test_saves_without_revision
     p = pages(:welcome)
     old_versions = p.versions.count
-
     p.save_without_revision
-
     p.without_revision do
       p.update_attributes :title => 'changed'
     end
-
     assert_equal old_versions, p.versions.count
   end
 
@@ -38,7 +37,6 @@ class VersionedTest < Test::Unit::TestCase
     p = pages(:welcome)
     assert_equal 24, p.version
     assert_equal 'Welcome to the weblog', p.title
-
     assert p.revert_to!(23), "Couldn't revert to 23"
     assert_equal 23, p.version
     assert_equal 'Welcome to the weblg', p.title
@@ -65,7 +63,6 @@ class VersionedTest < Test::Unit::TestCase
     p = pages(:welcome)
     assert_equal 24, p.version
     assert_equal 'Welcome to the weblog', p.title
-
     assert p.revert_to!(p.versions.find_by_version(23)), "Couldn't revert to 23"
     assert_equal 23, p.version
     assert_equal 'Welcome to the weblg', p.title
@@ -87,7 +84,6 @@ class VersionedTest < Test::Unit::TestCase
     p = locked_pages(:welcome)
     assert_equal 'Welcome to the weblog', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
-
     assert p.revert_to!(p.versions.first.lock_version), "Couldn't revert to 23"
     assert_equal 'Welcome to the weblg', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
@@ -97,7 +93,6 @@ class VersionedTest < Test::Unit::TestCase
     p = locked_pages(:welcome)
     assert_equal 'Welcome to the weblog', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
-
     assert p.revert_to!(p.versions.first), "Couldn't revert to 1"
     assert_equal 'Welcome to the weblg', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
@@ -123,11 +118,9 @@ class VersionedTest < Test::Unit::TestCase
   def test_lock_version_works_with_versioning
     p = locked_pages(:thinking)
     p2 = LockedPage.find(p.id)
-
     p.title = 'fresh title'
     p.save
     assert_equal 2, p.versions.size # limit!
-
     assert_raises(ActiveRecord::StaleObjectError) do
       p2.title = 'stale title'
       p2.save
@@ -137,7 +130,6 @@ class VersionedTest < Test::Unit::TestCase
   def test_version_if_condition
     p = Page.create! :title => "title"
     assert_equal 1, p.version
-
     Page.feeling_good = false
     p.save
     assert_equal 1, p.version
@@ -151,19 +143,15 @@ class VersionedTest < Test::Unit::TestCase
       alias_method :old_feeling_good, :feeling_good?
       alias_method :feeling_good?, :new_feeling_good
     end
-
     p = Page.create! :title => "title"
     assert_equal 1, p.version # version does not increment
     assert_equal 1, p.versions.count
-
     p.update_attributes(:title => 'new title')
     assert_equal 1, p.version # version does not increment
     assert_equal 1, p.versions.count
-
     p.update_attributes(:title => 'a title')
     assert_equal 2, p.version
     assert_equal 2, p.versions.count
-
     # reset original if condition
     Page.class_eval { alias_method :feeling_good?, :old_feeling_good }
   end
@@ -172,19 +160,15 @@ class VersionedTest < Test::Unit::TestCase
     # set new if condition
     old_condition = Page.version_condition
     Page.version_condition = Proc.new { |page| page.title[0..0] == 'b' }
-
     p = Page.create! :title => "title"
     assert_equal 1, p.version # version does not increment
     assert_equal 1, p.versions.count
-
     p.update_attributes(:title => 'a title')
     assert_equal 1, p.version # version does not increment
     assert_equal 1, p.versions.count
-
     p.update_attributes(:title => 'b title')
     assert_equal 2, p.version
     assert_equal 2, p.versions.count
-
     # reset original if condition
     Page.version_condition = old_condition
   end
@@ -224,19 +208,16 @@ class VersionedTest < Test::Unit::TestCase
     p = LockedPage.create! :title => "title"
     assert_equal 1, p.lock_version
     assert_equal 1, p.versions(true).size
-
     p.body = 'whoa'
     assert !p.save_version?
     p.save
     assert_equal 2, p.lock_version # still increments version because of optimistic locking
     assert_equal 1, p.versions(true).size
-
     p.title = 'updated title'
     assert p.save_version?
     p.save
     assert_equal 3, p.lock_version
     assert_equal 1, p.versions(true).size # version 1 deleted
-
     p.title = 'updated title!'
     assert p.save_version?
     p.save
@@ -277,13 +258,11 @@ class VersionedTest < Test::Unit::TestCase
     association = Page.reflect_on_association(:versions)
     options = association.options
     assert_equal :delete_all, options[:dependent]
-
     association = Widget.reflect_on_association(:versions)
     options = association.options
     assert_equal :nullify, options[:dependent]
     assert_equal 'version desc', options[:order]
     assert_equal 'widget_id', options[:foreign_key]
-
     widget = Widget.create! :name => 'new widget'
     assert_equal 1, Widget.count
     assert_equal 1, Widget.versioned_class.count
@@ -349,4 +328,7 @@ class VersionedTest < Test::Unit::TestCase
     assert landmarks(:washington).changed?
     assert !landmarks(:washington).altered?
   end
+  
 end
+
+

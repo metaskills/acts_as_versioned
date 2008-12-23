@@ -1,4 +1,5 @@
 ActiveRecord::Schema.define(:version => 0) do
+  
   create_table :pages, :force => true do |t|
     t.column :version, :integer
     t.column :title, :string, :limit => 255
@@ -79,4 +80,8 @@ ActiveRecord::Schema.define(:version => 0) do
   end
   
   add_index :landmark_versions, [:landmark_id, :version], :unique => true
+  
 end
+
+
+
