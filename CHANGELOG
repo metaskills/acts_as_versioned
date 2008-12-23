@@ -2,6 +2,7 @@
 [master]
 
   * (23 Dec 2008) Clean up old old code and start move towards new gem [Ken Collins]
+    * Starting a .gitignore file.
 
 [0.5.2]
 
