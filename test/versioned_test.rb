@@ -2,10 +2,6 @@ require 'helper'
 
 class VersionedTest < AAVTestCase
   
-  fixtures :pages, :page_versions, :locked_pages, :locked_pages_revisions, :authors, :landmarks, :landmark_versions
-  set_fixture_class :page_versions => Page::Version
-  
-  setup :load_schema
   
   def test_saves_versioned_copy
     p = Page.create! :title => 'first title', :body => 'first body'
