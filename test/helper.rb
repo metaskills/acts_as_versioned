@@ -1,6 +1,5 @@
 require File.join(File.dirname(__FILE__),'lib/boot') unless defined?(ActiveRecord)
 require 'test/unit'
-require 'lib/test_case'
 require 'acts_as_versioned'
 
 config = YAML::load(IO.read(File.dirname(__FILE__)+'/lib/database.yml'))
@@ -8,7 +7,7 @@ ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__)+'/debug.log')
 ActiveRecord::Base.configurations = {'test' => config[ENV['DB'] || 'sqlite3']}
 ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
 
-class AAV::TestCase < ActiveRecord::TestCase
+class AAVTestCase < ActiveRecord::TestCase
   
   self.fixture_path               = File.dirname(__FILE__)+'/fixtures'
   self.use_instantiated_fixtures  = false

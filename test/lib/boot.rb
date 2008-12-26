@@ -8,10 +8,14 @@ rails_version = ENV['RAILS_VERSION'] || '2.2.2'
   $LOAD_PATH.unshift(load_path) unless $LOAD_PATH.include?(load_path)
 end
 
-puts "Using rails #{rails_version} from gems"
-gem 'rails', rails_version
-gem 'active_record'
+puts "Using ActiveRecord #{rails_version} from gems"
+gem 'activerecord', rails_version
 
 require 'active_record'
 require 'active_record/fixtures'
+
+FIXTURES_ROOT   = project_root + "/test/fixtures"
+MIGRATIONS_ROOT = project_root + "/test/migrations"
+
+require 'active_record/test_case'
 
