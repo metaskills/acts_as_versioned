@@ -1,6 +1,4 @@
-require File.join(File.dirname(__FILE__), 'abstract_unit')
-require File.join(File.dirname(__FILE__), 'fixtures/page')
-require File.join(File.dirname(__FILE__), 'fixtures/widget')
+require 'helper'
 
 class VersionedTest < Test::Unit::TestCase
   
