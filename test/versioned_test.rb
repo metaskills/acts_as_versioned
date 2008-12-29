@@ -11,7 +11,7 @@ class VersionedTest < AAVTestCase
     assert_instance_of Page.versioned_class, p.versions.first
   end
 
-  test "version has unique created at" do
+  test "version has unique created on" do
     p = pages(:welcome)
     p.title = 'update me'
     p.save!

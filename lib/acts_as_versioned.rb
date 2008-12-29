@@ -21,12 +21,13 @@
 
 module ActiveRecord #:nodoc:
   module Acts #:nodoc:
-    # Specify this act if you want to save a copy of the row in a versioned table.  This assumes there is a 
-    # versioned table ready and that your model has a version field.  This works with optimistic locking if the lock_version
-    # column is present as well.
-    #
-    # The class for the versioned model is derived the first time it is seen. Therefore, if you change your database schema you have to restart
-    # your container for the changes to be reflected. In development mode this usually means restarting WEBrick.
+    # Specify this act if you want to save a copy of the row in a versioned table. This assumes there is a 
+    # versioned table ready and that your model has a version field. This works with optimistic locking if the 
+    # lock_version column is present as well.
+    # 
+    # The class for the versioned model is derived the first time it is seen. Therefore, if you change your 
+    # database schema you have to restart your container for the changes to be reflected. In development mode 
+    # this usually means restarting WEBrick.
     #
     #   class Page < ActiveRecord::Base
     #     # assumes pages_versions table
@@ -127,15 +128,16 @@ module ActiveRecord #:nodoc:
         #
         # == Database Schema
         #
-        # The model that you're versioning needs to have a 'version' attribute. The model is versioned 
-        # into a table called #{model}_versions where the model name is singlular. The _versions table should 
-        # contain all the fields you want versioned, the same version column, and a #{model}_id foreign key field.
+        # The model that you're versioning needs to have a 'version' attribute. The model is versioned into a 
+        # table called #{model}_versions where the model name is singlular. The _versions table should contain 
+        # all the fields you want versioned, the same version column, and a #{model}_id foreign key field.
         #
-        # A lock_version field is also accepted if your model uses Optimistic Locking.  If your table uses Single Table inheritance,
-        # then that field is reflected in the versioned model as 'versioned_type' by default.
-        #
+        # A lock_version field is also accepted if your model uses Optimistic Locking. If your table uses Single 
+        # Table inheritance, then that field is reflected in the versioned model as 'versioned_type' by default.
+        # 
         # Acts_as_versioned comes prepared with the ActiveRecord::Acts::Versioned::ActMethods::ClassMethods#create_versioned_table 
-        # method, perfect for a migration.  It will also create the version column if the main model does not already have it.
+        # method, perfect for a migration.  It will also create the version column if the main model does not 
+        # already have it.
         #
         #   class AddVersions < ActiveRecord::Migration
         #     def self.up
@@ -155,7 +157,7 @@ module ActiveRecord #:nodoc:
         # 
         #   [self.primary_key, inheritance_column, 'version', 'lock_version', versioned_inheritance_column]
         #
-        # You can add or change those by modifying #non_versioned_columns.  Note that this takes strings and not symbols.
+        # You can add or change those by modifying #non_versioned_columns. Note that this takes strings and not symbols.
         #
         #   class Post < ActiveRecord::Base
         #     acts_as_versioned
@@ -307,7 +309,7 @@ module ActiveRecord #:nodoc:
           revert_to(version) ? save_without_revision : false
         end
 
-        # Temporarily turns off Optimistic Locking while saving.  Used when reverting so that a new version is not created.
+        # Temporarily turns off Optimistic Locking while saving. Used when reverting so that a new version is not created.
         def save_without_revision
           save_without_revision!
           true
