@@ -25,21 +25,31 @@ require 'active_record/fixtures'
 require 'active_record/test_case'
 
 
-# Establishing the ActiveRecord connection.
+# Establishing the ActiveRecord connection and DB specific tasks.
 
+ardb = ENV['DB'] || 'sqlite3'
 arconfig = YAML::load(IO.read("#{PROJECT_ROOT}/test/lib/database.yml"))
+
+case ardb
+when 'sqlserver'
+  gem 'rails-sqlserver-2000-2005-adapter'
+  require 'active_record/connection_adapters/sqlserver_adapter'
+end
+
 ActiveRecord::Base.logger = Logger.new("#{PROJECT_ROOT}/test/debug.log")
-ActiveRecord::Base.configurations = {'test' => arconfig[ENV['DB'] || 'sqlite3']}
+ActiveRecord::Base.configurations = {'test' => arconfig[ardb]}
 ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
+puts "With database: #{ardb}"
 
 
-# Creating the DB schema.
+# Creating the DB schema and DB specific tasks.
 
 ActiveRecord::Migration.verbose = false
 
 load(File.dirname(__FILE__)+"/schema.rb")
 
-if ENV['DB'] == 'postgresql'
+case ardb
+when 'postgresql'
   ActiveRecord::Base.connection.execute "DROP SEQUENCE widgets_seq;" rescue nil
   ActiveRecord::Base.connection.remove_column :widget_versions, :id
   ActiveRecord::Base.connection.execute "CREATE SEQUENCE widgets_seq START 101;"

@@ -4,6 +4,7 @@
   * (23 Dec 2008) Clean up old old code and start move towards new gem [Ken Collins]
     * Starting a .gitignore file.
     * Moving to a test/lib based directory structure with a boot and AAV test case based from ActiveRecord's case.
+    * Create rake test and test_dbs tasks.
 
 [0.5.2]
 

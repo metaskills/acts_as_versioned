@@ -30,13 +30,10 @@ class MigrationTest < AAVTestCase
   
   def create_thing
     @thing = Thing.create :title => 'blah blah', :price => 123.45, :type => 'Thing'
-    assert_equal 1, @thing.versions.size
   end
   
   def migrate_down
     ActiveRecord::Migrator.down(MIGRATIONS_ROOT)
-    Thing.reset_column_information
-    assert_raises(ActiveRecord::StatementInvalid) { Thing.create :title => 'blah blah' }
     ActiveRecord::Base.connection.initialize_schema_migrations_table
     ActiveRecord::Base.connection.assume_migrated_upto_version(0)
   end
