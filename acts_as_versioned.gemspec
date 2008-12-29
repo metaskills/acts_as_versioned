@@ -36,6 +36,6 @@ Gem::Specification.new do |s|
     "test/models/thing.rb",
     "test/models/widget.rb",
     "test/versioned_test.rb" ]
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--main", "README.rdoc"]
-  s.extra_rdoc_files = ["README.rdoc"]
+  s.rdoc_options = ["--main", "README.rdoc"]
+  s.extra_rdoc_files = ["README.rdoc","CHANGELOG","MIT-LICENSE"]
 end
