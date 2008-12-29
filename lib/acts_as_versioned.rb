@@ -245,10 +245,7 @@ module ActiveRecord #:nodoc:
             def next
               self.class.after(self)
             end
-
-            def versions_count
-              page.version
-            end
+            
           end
 
           versioned_class.cattr_accessor :original_class
