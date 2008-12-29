@@ -3,7 +3,7 @@ require 'helper'
 class VersionedTest < AAVTestCase
   
   
-  def test_saves_versioned_copy
+  test "saves versioned copy" do
     p = Page.create! :title => 'first title', :body => 'first body'
     assert !p.new_record?
     assert_equal 1, p.versions.size
@@ -11,14 +11,14 @@ class VersionedTest < AAVTestCase
     assert_instance_of Page.versioned_class, p.versions.first
   end
 
-  def test_version_has_unique_created_at
+  test "version has unique created at" do
     p = pages(:welcome)
     p.title = 'update me'
     p.save!
     assert_not_equal p.created_on, p.versions.latest.created_on
   end
 
-  def test_saves_without_revision
+  test "saves without revision" do
     p = pages(:welcome)
     old_versions = p.versions.count
     p.save_without_revision
@@ -28,7 +28,7 @@ class VersionedTest < AAVTestCase
     assert_equal old_versions, p.versions.count
   end
 
-  def test_rollback_with_version_number
+  test "rollback with version number" do
     p = pages(:welcome)
     assert_equal 24, p.version
     assert_equal 'Welcome to the weblog', p.title
@@ -37,24 +37,24 @@ class VersionedTest < AAVTestCase
     assert_equal 'Welcome to the weblg', p.title
   end
 
-  def test_versioned_class_name
+  test "versioned class name" do
     assert_equal 'Version', Page.versioned_class_name
     assert_equal 'LockedPageRevision', LockedPage.versioned_class_name
   end
 
-  def test_versioned_class
+  test "versioned class" do
     assert_equal Page::Version,                  Page.versioned_class
     assert_equal LockedPage::LockedPageRevision, LockedPage.versioned_class
   end
 
-  def test_special_methods
+  test "special methods" do
     assert_nothing_raised { pages(:welcome).feeling_good? }
     assert_nothing_raised { pages(:welcome).versions.first.feeling_good? }
     assert_nothing_raised { locked_pages(:welcome).hello_world }
     assert_nothing_raised { locked_pages(:welcome).versions.first.hello_world }
   end
 
-  def test_rollback_with_version_class
+  test "rollback with version class" do
     p = pages(:welcome)
     assert_equal 24, p.version
     assert_equal 'Welcome to the weblog', p.title
@@ -63,19 +63,19 @@ class VersionedTest < AAVTestCase
     assert_equal 'Welcome to the weblg', p.title
   end
 
-  def test_rollback_fails_with_invalid_revision
+  test "rollback fails with invalid revision" do
     p = locked_pages(:welcome)
     assert !p.revert_to!(locked_pages(:thinking))
   end
 
-  def test_saves_versioned_copy_with_options
+  test "saves versioned copy with options" do
     p = LockedPage.create! :title => 'first title'
     assert !p.new_record?
     assert_equal 1, p.versions.size
     assert_instance_of LockedPage.versioned_class, p.versions.first
   end
 
-  def test_rollback_with_version_number_with_options
+  test "rollback with version number with options" do
     p = locked_pages(:welcome)
     assert_equal 'Welcome to the weblog', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
@@ -84,7 +84,7 @@ class VersionedTest < AAVTestCase
     assert_equal 'LockedPage', p.versions.first.version_type
   end
 
-  def test_rollback_with_version_class_with_options
+  test "rollback with version class with options" do
     p = locked_pages(:welcome)
     assert_equal 'Welcome to the weblog', p.title
     assert_equal 'LockedPage', p.versions.first.version_type
@@ -93,7 +93,7 @@ class VersionedTest < AAVTestCase
     assert_equal 'LockedPage', p.versions.first.version_type
   end
 
-  def test_saves_versioned_copy_with_sti
+  test "saves versioned copy with sti" do
     p = SpecialLockedPage.create! :title => 'first title'
     assert !p.new_record?
     assert_equal 1, p.versions.size
@@ -101,7 +101,7 @@ class VersionedTest < AAVTestCase
     assert_equal 'SpecialLockedPage', p.versions.first.version_type
   end
 
-  def test_rollback_with_version_number_with_sti
+  test "rollback with version number with sti" do
     p = locked_pages(:thinking)
     assert_equal 'So I was thinking', p.title
 
@@ -110,7 +110,7 @@ class VersionedTest < AAVTestCase
     assert_equal 'SpecialLockedPage', p.versions.first.version_type
   end
 
-  def test_lock_version_works_with_versioning
+  test "lock version works with versioning" do
     p = locked_pages(:thinking)
     p2 = LockedPage.find(p.id)
     p.title = 'fresh title'
@@ -122,7 +122,7 @@ class VersionedTest < AAVTestCase
     end
   end
 
-  def test_version_if_condition
+  test "version if condition" do
     p = Page.create! :title => "title"
     assert_equal 1, p.version
     Page.feeling_good = false
@@ -131,7 +131,7 @@ class VersionedTest < AAVTestCase
     Page.feeling_good = true
   end
 
-  def test_version_if_condition2
+  test "version if condition2" do
     # set new if condition
     Page.class_eval do
       def new_feeling_good() title[0..0] == 'a'; end
@@ -151,7 +151,7 @@ class VersionedTest < AAVTestCase
     Page.class_eval { alias_method :feeling_good?, :old_feeling_good }
   end
 
-  def test_version_if_condition_with_block
+  test "version if condition with block" do
     # set new if condition
     old_condition = Page.version_condition
     Page.version_condition = Proc.new { |page| page.title[0..0] == 'b' }
@@ -168,7 +168,7 @@ class VersionedTest < AAVTestCase
     Page.version_condition = old_condition
   end
 
-  def test_version_no_limit
+  test "version no limit" do
     p = Page.create! :title => "title", :body => 'first body'
     p.save
     p.save
@@ -180,7 +180,7 @@ class VersionedTest < AAVTestCase
     end
   end
 
-  def test_version_max_limit
+  test "version max limit" do
     p = LockedPage.create! :title => "title"
     p.update_attributes(:title => "title1")
     p.update_attributes(:title => "title2")
@@ -193,13 +193,13 @@ class VersionedTest < AAVTestCase
     end
   end
 
-  def test_track_altered_attributes_default_value
+  test "track altered attributes default value" do
     assert !Page.track_altered_attributes
     assert LockedPage.track_altered_attributes
     assert SpecialLockedPage.track_altered_attributes
   end
 
-  def test_track_altered_attributes
+  test "track altered attributes" do
     p = LockedPage.create! :title => "title"
     assert_equal 1, p.lock_version
     assert_equal 1, p.versions(true).size
@@ -220,36 +220,36 @@ class VersionedTest < AAVTestCase
     assert_equal 2, p.versions(true).size # version 1 deleted
   end
 
-  def test_find_versions
+  test "find versions" do
     assert_equal 1, locked_pages(:welcome).versions.find(:all, :conditions => ['title LIKE ?', '%weblog%']).size
   end
 
-  def test_find_version
+  test "find version" do
     assert_equal page_versions(:welcome_1), pages(:welcome).versions.find_by_version(23)
   end
 
-  def test_with_sequence
+  test "with sequence" do
     assert_equal 'widgets_seq', Widget.versioned_class.sequence_name
     3.times { Widget.create! :name => 'new widget' }
     assert_equal 3, Widget.count
     assert_equal 3, Widget.versioned_class.count
   end
 
-  def test_has_many_through
+  test "has many through" do
     assert_equal [authors(:caged), authors(:mly)], pages(:welcome).authors
   end
 
-  def test_has_many_through_with_custom_association
+  test "has many through with custom association" do
     assert_equal [authors(:caged), authors(:mly)], pages(:welcome).revisors
   end
 
-  def test_referential_integrity
+  test "referential integrity" do
     pages(:welcome).destroy
     assert_equal 0, Page.count
     assert_equal 0, Page::Version.count
   end
 
-  def test_association_options
+  test "association options" do
     association = Page.reflect_on_association(:versions)
     options = association.options
     assert_equal :delete_all, options[:dependent]
@@ -266,51 +266,51 @@ class VersionedTest < AAVTestCase
     assert_equal 1, Widget.versioned_class.count
   end
 
-  def test_versioned_records_should_belong_to_parent
+  test "versioned records should belong to parent" do
     page = pages(:welcome)
     page_version = page.versions.last
     assert_equal page, page_version.page
   end
 
-  def test_unaltered_attributes
+  test "unaltered attributes" do
     landmarks(:washington).attributes = landmarks(:washington).attributes.except("id")
     assert !landmarks(:washington).changed?
   end
 
-  def test_unchanged_string_attributes
+  test "unchanged string attributes" do
     landmarks(:washington).attributes = landmarks(:washington).attributes.except("id").inject({}) { |params, (key, value)| params.update(key => value.to_s) }
     assert !landmarks(:washington).changed?
   end
 
-  def test_should_find_earliest_version
+  test "should find earliest version" do
     assert_equal page_versions(:welcome_1), pages(:welcome).versions.earliest
   end
 
-  def test_should_find_latest_version
+  test "should find latest version" do
     assert_equal page_versions(:welcome_2), pages(:welcome).versions.latest
   end
 
-  def test_should_find_previous_version
+  test "should find previous version" do
     assert_equal page_versions(:welcome_1), page_versions(:welcome_2).previous
     assert_equal page_versions(:welcome_1), pages(:welcome).versions.before(page_versions(:welcome_2))
   end
 
-  def test_should_find_next_version
+  test "should find next version" do
     assert_equal page_versions(:welcome_2), page_versions(:welcome_1).next
     assert_equal page_versions(:welcome_2), pages(:welcome).versions.after(page_versions(:welcome_1))
   end
 
-  def test_should_find_version_count
+  test "should find version count" do
     assert_equal 2, pages(:welcome).versions.size
   end
 
-  def test_if_changed_creates_version_if_a_listed_column_is_changed
+  test "if changed creates version if a listed column is changed" do
     landmarks(:washington).name = "Washington"
     assert landmarks(:washington).changed?
     assert landmarks(:washington).altered?
   end
 
-  def test_if_changed_creates_version_if_all_listed_columns_are_changed
+  test "if changed creates version if all listed columns are changed" do
     landmarks(:washington).name = "Washington"
     landmarks(:washington).latitude = 1.0
     landmarks(:washington).longitude = 1.0
@@ -318,11 +318,12 @@ class VersionedTest < AAVTestCase
     assert landmarks(:washington).altered?
   end
 
-  def test_if_changed_does_not_create_new_version_if_unlisted_column_is_changed
+  test "if changed does not create new version if unlisted column is changed" do
     landmarks(:washington).doesnt_trigger_version = "This should not trigger version"
     assert landmarks(:washington).changed?
     assert !landmarks(:washington).altered?
   end
+  
   
 end
 
