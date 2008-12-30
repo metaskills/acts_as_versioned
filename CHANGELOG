@@ -1,7 +1,9 @@
 
 [master]
   
-  * Remove #versions_count really.
+  * (29 Dec 2008) Clean up old old code and start move towards new gem [Ken Collins]
+    * Remove #versions_count really.
+    * 
 
 [0.6]
   

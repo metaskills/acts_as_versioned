@@ -9,11 +9,16 @@ Has tests for many DBs in ActiveRecord version 2.2.2
 
 == Resources
 
-Install
+Install the gem manually.
 
-* sudo gem install metaskills-acts_as_versioned
+  $ gem install metaskills-acts_as_versioned
 
-Git
+Or with a rails config.gem dependency.
+
+  config.gem 'metaskills-acts_as_versioned', :lib => 'acts_as_versioned', :source => 'http://gems.github.com/'
+
+
+The git repository is located here:
 
 * http://github.com/metaskills/acts_as_versioned/tree/master
 

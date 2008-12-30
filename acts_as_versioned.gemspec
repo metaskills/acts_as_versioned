@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = "acts_as_versioned"
   s.version  = "0.6.0"
-  s.date     = "2008-12-29"
+  s.date     = "2008-12-30"
   s.summary  = "ActiveRecord plugin for versioning your models."
   s.email    = "ken@metaskills.net"
   s.homepage = "http://github.com/metaskills/acts_as_versioned/"
