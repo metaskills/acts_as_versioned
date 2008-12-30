@@ -53,6 +53,12 @@ class VersionedTest < AAVTestCase
     assert_nothing_raised { locked_pages(:welcome).hello_world }
     assert_nothing_raised { locked_pages(:welcome).versions.first.hello_world }
   end
+  
+  test "version objects are ordered by the version columns" do
+    p = pages(:welcome)
+    assert_sql(/ORDER BY version ASC/) { p.versions(true) }
+    assert_equal [23,24], p.versions.map(&:version)
+  end
 
   test "rollback with version class" do
     p = pages(:welcome)

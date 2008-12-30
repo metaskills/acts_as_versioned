@@ -41,6 +41,16 @@ ActiveRecord::Base.configurations = {'test' => arconfig[ardb]}
 ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
 puts "With database: #{ardb}"
 
+ActiveRecord::Base.connection.class.class_eval do
+  IGNORED_SQL = [/^PRAGMA/, /^SELECT currval/, /^SELECT CAST/, /^SELECT @@IDENTITY/, /^SELECT @@ROWCOUNT/]
+  def execute_with_query_record(sql, name = nil, &block)
+    $queries_executed ||= []
+    $queries_executed << sql unless IGNORED_SQL.any? { |r| sql =~ r }
+    execute_without_query_record(sql, name, &block)
+  end
+  alias_method_chain :execute, :query_record
+end
+
 
 # Creating the DB schema and DB specific tasks.
 

@@ -186,6 +186,7 @@ module ActiveRecord #:nodoc:
           self.version_association_options  = {
                                                 :class_name  => "#{self.to_s}::#{versioned_class_name}",
                                                 :foreign_key => versioned_foreign_key,
+                                                :order => "#{version_column} ASC",
                                                 :dependent   => :delete_all
                                               }.merge(options[:association_options] || {})
 

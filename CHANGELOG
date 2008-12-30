@@ -1,9 +1,9 @@
 
 [master]
   
-  * (29 Dec 2008) Clean up old old code and start move towards new gem [Ken Collins]
-    * Remove #versions_count really.
-    * 
+  * (29 Dec 2008) Remove #versions_count really. [Ken Collins]
+  * (30 Dec 2008) Add assert_sql support in boot.rb. Also changed core lib to order by the has many versions 
+    association with the version_column, support with tests. [Ken Collins]
 
 [0.6]
   

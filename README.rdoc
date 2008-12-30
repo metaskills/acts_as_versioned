@@ -11,7 +11,7 @@ Has tests for many DBs in ActiveRecord version 2.2.2
 
 Install the gem manually.
 
-  $ gem install metaskills-acts_as_versioned
+  $ sudo gem install metaskills-acts_as_versioned
 
 Or with a rails config.gem dependency.
 

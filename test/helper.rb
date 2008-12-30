@@ -10,7 +10,18 @@ class AAVTestCase < ActiveRecord::TestCase
   fixtures :all
   set_fixture_class :page_versions => Page::Version
   
+  protected
   
+  def assert_sql(*patterns_to_match)
+    $queries_executed = []
+    yield
+  ensure
+    failed_patterns = []
+    patterns_to_match.each do |pattern|
+      failed_patterns << pattern unless $queries_executed.any?{ |sql| pattern === sql }
+    end
+    assert failed_patterns.empty?, "Query pattern(s) #{failed_patterns.map(&:inspect).join(', ')} not found in:\n#{$queries_executed.inspect}"
+  end
   
 end
 
