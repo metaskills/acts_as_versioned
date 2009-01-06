@@ -1,5 +1,9 @@
 
 [master]
+
+  *
+
+[0.6.1]
   
   * (29 Dec 2008) Remove #versions_count really. [Ken Collins]
   * (30 Dec 2008) Add assert_sql support in boot.rb. Also changed core lib to order by the has many versions 
