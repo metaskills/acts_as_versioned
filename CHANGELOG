@@ -1,7 +1,16 @@
 
 [master]
 
-  *
+  * 
+
+
+[0.6.2]
+
+  * (08 Feb 2009) Avoid error with model preload by removing create_versioned_table call in AAV call. [Ngoc Dao]
+  * (08 Feb 2009) Do not force updated_at [Ngoc Dao]
+  * (08 Feb 2009) Change the create_versioned_table class method to ask the connection if table_exists?. Fixes 
+    a bug that allows adapters that allow user owned prefixes for table names. [Ken Collins]
+
 
 [0.6.1]
   
