@@ -23,6 +23,7 @@ MIGRATIONS_ROOT = PROJECT_ROOT + "/test/migrations"
 
 require 'active_record/fixtures'
 require 'active_record/test_case'
+require 'active_record/version'
 
 
 # Establishing the ActiveRecord connection and DB specific tasks.
